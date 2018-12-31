@@ -1,9 +1,5 @@
 <%--
-  Created by IntelliJ IDEA.
-  User: SeeClanUkyo
-  Date: 2018/12/06
-  Time: 13:36
-  To change this template use File | Settings | File Templates.
+创建自定义菜单
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -36,7 +32,7 @@
                     {
                         "type": "view",
                         "name": "搜索",
-                        "url": "http://www.soso.com/",
+                        "url": "http://www.ykmimi.com",
                         "sub_button": [ ]
                     },
                     {
@@ -50,6 +46,12 @@
                         "name": "赞一下我们",
                         "key": "V1001_GOOD",
                         "sub_button": [ ]
+                    },
+                    {
+                        "type": "click",
+                        "name": "获取推广二维码",
+                        "key": "V1001_QRCODE",
+                        "sub_button": [ ]
                     }
                 ]
             }
@@ -58,6 +60,14 @@
 }
 </pre>
 
+
+
+<img src="http://mmbiz.qpic.cn/mmbiz_jpg/q91TNTxJ6WWKuuiaibT3JVP1gOqo3mW9t4H6RaKwS5Kzf8qFCI4BBdFDjoXhsPuQaCcMCEwjibfwdh3hC8P9AYzeQ/0"/>
+
+
+
+
+
 <button id="createMenuBtn">点击提交--create自定义菜单</button>
 
 <button id="getMenuBtn">获取--get自定义菜单数据</button>
@@ -65,8 +75,8 @@
 <button id="deleteMenuBtn">删除--delete自定义菜单(全部)</button>
 <script>
     //  如果 menuJson 就是 自定义菜单转换 json 后的数据.
-    var menuJson = '{"menu":{"button":[{"type":"click","name":"今日歌曲","key":"V1001_TODAY_MUSIC","sub_button":[]},{"type":"click","name":"歌手简介","key":"V1001_TODAY_SINGER","sub_button":[]},{"name":"菜单","sub_button":[{"type":"view","name":"搜索","url":"http://www.soso.com/","sub_button":[]},{"type":"view","name":"视频","url":"http://v.qq.com/","sub_button":[]},{"type":"click","name":"赞一下我们","key":"V1001_GOOD","sub_button":[]}]}]}}';
-
+    var menuJson = '{"menu":{"button":[{"type":"click","name":"今日歌曲","key":"V1001_TODAY_MUSIC","sub_button":[]},{"type":"click","name":"歌手简介","key":"V1001_TODAY_SINGER","sub_button":[]},{"name":"菜单","sub_button":[{"type":"view","name":"手机首页","url":"http://ngrok.ykmimi.com/","sub_button":[]},{"type":"view","name":"ykmimi","url":"http://www.ykmimi.com","sub_button":[]},{"type":"click","name":"赞一下我们","key":"V1001_GOOD","sub_button":[]},{"type":"click","name":"推广二维码","key":"V1001_QRCODE","sub_button":[]}]}]}}';
+    //
 
     // var menuJsonObj = JSON.parse(menuJson);  //string 转 object
     // var menuJsonStr = JSON.stringify(menuJson);  //string 转 转义后的字符
@@ -87,7 +97,7 @@
             method:"POST",
             dataType:"json",
             success:function(data){
-                alert("submit ok");
+                alert(data);
             }
         })
     }

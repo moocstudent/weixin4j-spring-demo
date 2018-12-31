@@ -1,0 +1,68 @@
+wxpay包中为官方提供的demo
+示例main:
+
+package com.wechat.demo.main;
+
+import com.wechat.demo.wxpay.MyIWXPayConfig;
+import com.wechat.demo.wxpay.WXPay;
+import com.wechat.demo.wxpay.WXPayUtil;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+public class TestWxPay {
+
+    public static void main(String[] args) throws Exception {
+        MyIWXPayConfig config = new MyIWXPayConfig();
+        WXPay wxpay = new WXPay(config, true, true);
+
+
+        String key = WXPayUtil.retrieveSandboxSignKey(config, wxpay);
+        System.out.println(key);
+        config.setKey(key);
+
+        String out_trade_no = "letstryaneWpayWay"+new Date().getTime();
+
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("body", "baige-test-wechat-pay");
+        data.put("out_trade_no", out_trade_no);
+        data.put("device_info", "");
+        data.put("fee_type", "CNY");
+        data.put("total_fee", "102");
+        data.put("spbill_create_ip", "123.12.12.123");
+        data.put("notify_url", "http://www.ykmimi.com/wxpay/notify");
+        data.put("trade_type", "JSAPI");  // 此处指定为扫码支付
+        data.put("product_id", "1341121231241000000");
+        System.out.println("发送前的total_fee:"+data.get("total_fee"));
+
+        try {
+            Map<String, String> resp = wxpay.unifiedOrder(data);
+            boolean payResultNotifySignatureValid = wxpay.isPayResultNotifySignatureValid(resp);
+            System.err.println("SignatureValid unifiedOrder:"+payResultNotifySignatureValid);
+            String return_code = resp.get("return_code");
+            System.err.println("out_trade_no:"+out_trade_no);
+            System.err.println("return_code : " + return_code);
+            System.err.println("resp 统一下单: " + resp);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Map<String,String> queryData = new HashMap<String,String>();
+        queryData.put("out_trade_no",out_trade_no);
+        try {
+            Map<String, String> resp1 = wxpay.orderQuery(queryData);
+            String total_fee = resp1.get("total_fee");
+            System.out.println("查询订单的total_fee:"+data.get("total_fee"));
+            boolean payResultNotifySignatureValid = wxpay.isPayResultNotifySignatureValid(resp1);
+            System.err.println("SignatureValid queryOrder:"+payResultNotifySignatureValid);
+            System.err.println("out_trade_no:"+out_trade_no);
+            System.err.println("resp1 查询订单:"+resp1);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+}

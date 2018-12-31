@@ -1,46 +1,62 @@
 package com.baigehuidi.demo.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baigehuidi.demo.service.WeixinComponentService;
+import com.baigehuidi.demo.weixin4j.WeixinException;
+import com.baigehuidi.demo.weixin4j.component.MenuComponent;
+import com.baigehuidi.demo.weixin4j.model.menu.Menu;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.weixin4j.WeixinException;
-import org.weixin4j.component.MenuComponent;
-import org.weixin4j.model.menu.Menu;
 
+/**
+ * TODO 改善通过 -> 过滤器 拦截器 防止调用链接被非操作人员使用
+ * 菜单生成 该路径进行过滤时:
+ * 1.可根据用户权限和校验码 防止对外暴露
+ */
 @RestController
 @RequestMapping("/menu")
 public class WeixinMenuController {
 
-    //获取menuComponent实例,源码中没有@Component
-    private static MenuComponent menuComponent = WeixinComponentService.getMenuComponent();
+    //获取menuComponent实例,源码中没有@Component,现在有了 12-08
+    @Autowired
+    private MenuComponent menuComponent;
 
     /**
-     * 需要前端页面form表单进行自定义菜单数据传输 TODO
-     * @param  menuJson
+     * 需要前端页面form表单进行自定义菜单数据传输
+     * 成功1 创建失败0
+     *
+     * @param menuJson
      */
 
-
     @RequestMapping("create")
-    public void createMenu(@RequestBody String menuJson) {
+    public Integer createMenu(@RequestBody String menuJson) {
 
-//        System.out.println(menuJson);
+        System.out.println(menuJson);
         //change menuJson -> (JSONObject)menuJson
-        JSONObject jsonObject = (JSONObject) JSONObject.parse(menuJson);
-//        System.out.println(jsonObject);
+        JSONObject jsonObject = JSON.parseObject(menuJson);
+
         //new a Menu instance
         Menu menu = new Menu(jsonObject);
         try {
             //create the menu
             menuComponent.create(menu);
+            System.out.println("createMenu OK.");
+            return 1;
         } catch (WeixinException e) {
             e.printStackTrace();
+            return 0;
         } finally {
         }
-        System.out.println("createMenu OK.");
+
     }
 
+
+    /**
+     * 获取自定义菜单
+     * @return Menu (json形式)
+     */
     @RequestMapping("get")
     public Menu getMenu() {
         try {
@@ -53,10 +69,14 @@ public class WeixinMenuController {
         return null;
     }
 
+    /**
+     * 删除自定义菜单
+     * @return 成功1 删除失败0
+     */
     @RequestMapping("delete")
     public Integer deleteMenu() {
         try {
-            if(getMenu()==null){
+            if (getMenu() == null) {
                 //如果菜单本来就是null,那么返回0
                 System.out.println("自定义菜单为null~");
                 return 0;

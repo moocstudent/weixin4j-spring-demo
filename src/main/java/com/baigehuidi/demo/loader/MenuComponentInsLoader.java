@@ -1,9 +1,8 @@
 package com.baigehuidi.demo.loader;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.baigehuidi.demo.weixin4j.component.MenuComponent;
 import org.springframework.stereotype.Component;
-import org.weixin4j.Weixin;
-import org.weixin4j.component.MenuComponent;
+
 
 @Component
 public class MenuComponentInsLoader {

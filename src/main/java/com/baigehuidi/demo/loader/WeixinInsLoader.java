@@ -1,7 +1,8 @@
 package com.baigehuidi.demo.loader;
 
+import com.baigehuidi.demo.weixin4j.Weixin;
 import org.springframework.stereotype.Component;
-import org.weixin4j.Weixin;
+
 
 @Component
 public class WeixinInsLoader {
